@@ -2,21 +2,19 @@ import { useState } from "react";
 import Map from "@/components/Map";
 import Markers from "@/components/Markers";
 
-import * as hospitals from "@/data/hospital_data.json";
-import { HospitalsProp } from "@/interface";
+import { HospitalProp } from "@/interface";
 import HospitalInfoBox from "@/components/HospitalInfoBox";
 
-export default function Home() {
+export default function Home({ hospitals }: { hospitals: HospitalProp[] }) {
   const [map, setMap] = useState(null);
   const [currentHospital, setCurrentHospital] = useState(null);
-  const hospitalsData = hospitals as HospitalsProp;
 
   return (
     <>
       <Map setMap={setMap} />
       <Markers
         map={map}
-        hospitalsData={hospitalsData.DATA}
+        hospitals={hospitals}
         setCurrentHospital={setCurrentHospital}
       />
       <HospitalInfoBox
@@ -25,4 +23,15 @@ export default function Home() {
       />
     </>
   );
+}
+
+export async function getStaticProps() {
+  const hospitals = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/hospitals`
+  ).then((res) => res.json());
+
+  return {
+    props: { hospitals },
+    revalidate: 60 * 60,
+  };
 }

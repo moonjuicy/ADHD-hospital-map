@@ -1,6 +1,6 @@
 export interface HospitalsProp {
-  DATA?: HospitalProp[];
-  DESCRIPTION?: HospitalProp;
+  DESCRIPTION: HospitalProp;
+  DATA: HospitalProp[];
 }
 // 필요한 값만 입력해도 됨
 export interface HospitalProp {

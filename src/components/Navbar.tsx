@@ -8,15 +8,15 @@ export default function Navbar() {
 
   return (
     <>
-      <div className='navbar'>
+      <div className='navbar bg-white'>
         <Link href='/' className='navbar__logo'>
           ADHD 병원 지도
         </Link>
         <div className='navbar__list'>
-          <Link href='/stores' className='navbar__list--item'>
+          <Link href='/hospitals' className='navbar__list--item'>
             병원 목록
           </Link>
-          <Link href='/stores/new' className='navbar__list--item'>
+          <Link href='/hospitals/new' className='navbar__list--item'>
             병원 등록
           </Link>
           <Link href='/users/likes' className='navbar__list--item'>

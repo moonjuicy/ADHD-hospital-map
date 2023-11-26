@@ -3,17 +3,13 @@ import { HospitalProp } from "@/interface";
 
 interface MarkerProps {
   map: any;
-  hospitalsData?: HospitalProp[];
+  hospitals: HospitalProp[];
   setCurrentHospital: Dispatch<SetStateAction<any>>;
 }
-export default function Markers({
-  map,
-  hospitalsData,
-  setCurrentHospital,
-}: MarkerProps) {
+export default function Markers({ map, hospitals, setCurrentHospital }: MarkerProps) {
   const loadKakaoMap = useCallback(() => {
     if (map) {
-      hospitalsData?.map((hospital: HospitalProp) => {
+      hospitals?.map((hospital: HospitalProp) => {
         const markerPosition = new window.kakao.maps.LatLng(
           hospital.wgs84lat,
           hospital.wgs84lon
@@ -50,7 +46,7 @@ export default function Markers({
         });
       });
     }
-  }, [hospitalsData, map, setCurrentHospital]);
+  }, [hospitals, map, setCurrentHospital]);
 
   useEffect(() => {
     loadKakaoMap();
