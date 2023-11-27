@@ -1,17 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { HospitalProp } from "@/interface";
-// Define an interface for the JSON structure
-interface HospitalData {
-  DATA: HospitalProp[];
-}
+import { HospitalType } from "@/interface";
+import { PrismaClient } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<HospitalProp[]>
+  res: NextApiResponse<HospitalType[]>
 ) {
-  // Dynamically import the JSON and assert its type
-  const jsonModule = await import("../../data/hospital_data.json");
-  const hospitals = (jsonModule.default as HospitalData).DATA;
-
+  const prisma = new PrismaClient();
+  const hospitals = await prisma.hospital.findMany({
+    orderBy: { id: "asc" },
+  });
   res.status(200).json(hospitals);
 }
