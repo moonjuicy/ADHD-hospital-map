@@ -1,18 +1,22 @@
 import { useEffect, Dispatch, SetStateAction, useCallback } from "react";
-import { HospitalProp } from "@/interface";
+import { HospitalType } from "@/interface";
 
 interface MarkerProps {
   map: any;
-  hospitals: HospitalProp[];
+  hospitals: HospitalType[];
   setCurrentHospital: Dispatch<SetStateAction<any>>;
 }
-export default function Markers({ map, hospitals, setCurrentHospital }: MarkerProps) {
+export default function Markers({
+  map,
+  hospitals,
+  setCurrentHospital,
+}: MarkerProps) {
   const loadKakaoMap = useCallback(() => {
     if (map) {
-      hospitals?.map((hospital: HospitalProp) => {
+      hospitals.map((hospital: HospitalType) => {
         const markerPosition = new window.kakao.maps.LatLng(
-          hospital.wgs84lat,
-          hospital.wgs84lon
+          hospital.lat,
+          hospital.lng
         );
 
         const marker = new window.kakao.maps.Marker({
@@ -22,7 +26,7 @@ export default function Markers({ map, hospitals, setCurrentHospital }: MarkerPr
         marker.setMap(map);
 
         // 마커 커서가 오되ㅆ을 때  마커위에 표할 인포 윈ㅗㅜ 생ㅓ
-        const content = `<div class="infowindow">${hospital.dutyname}</div>`;
+        const content = `<div class="infowindow">${hospital.name}</div>`;
 
         const customOverlay = new window.kakao.maps.CustomOverlay({
           position: markerPosition,

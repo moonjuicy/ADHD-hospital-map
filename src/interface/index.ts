@@ -7,3 +7,10 @@ export interface HospitalType {
   name?: string | null;
   category?: string | null;
 }
+
+export interface HospitalApiResponse {
+  data: HospitalType[];
+  page?: number;
+  totalPage?: number;
+  totalCount?: number;
+}

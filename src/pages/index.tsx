@@ -10,7 +10,7 @@ import axios from "axios";
 export default function Home({ hospitals }: { hospitals: HospitalType[] }) {
   const [map, setMap] = useState(null);
   const [currentHospital, setCurrentHospital] = useState(null);
-
+  console.log("hospitals", hospitals);
   return (
     <>
       <Map setMap={setMap} />
@@ -28,11 +28,12 @@ export default function Home({ hospitals }: { hospitals: HospitalType[] }) {
 }
 
 export async function getStaticProps() {
-  const hospitals = await axios(
+  const result = await axios(
     `${process.env.NEXT_PUBLIC_API_URL}/api/hospitals`
   );
+
   return {
-    props: { hospitals: hospitals.data },
+    props: { hospitals: result.data },
     revalidate: 60 * 60,
   };
 }

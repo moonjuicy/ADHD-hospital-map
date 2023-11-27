@@ -1,17 +1,20 @@
 import React from "react";
-import { HospitalType } from "@/interface";
+import { HospitalApiResponse } from "@/interface";
 import { useQuery } from "react-query";
 import axios from "axios";
 import Loading from "@/components/Loading";
-
+import { useRouter } from "next/router";
+import Pagination from "@/components/Pagination";
 export default function HospitalList() {
+  const router = useRouter();
+  const { page = "1" } = router.query;
   const {
     isLoading,
     isError,
-    data: hospitals,
-  } = useQuery("hospitals", async () => {
-    const { data } = await axios("/api/hospitals");
-    return data as HospitalType[];
+    data: result,
+  } = useQuery(`hospitals-${page}`, async () => {
+    const { data } = await axios(`/api/hospitals?page=${page}`);
+    return data as HospitalApiResponse;
   });
 
   if (isError) {
@@ -23,7 +26,7 @@ export default function HospitalList() {
         {isLoading ? (
           <Loading />
         ) : (
-          hospitals?.map((hospital, index) => (
+          result?.data?.map((hospital, index) => (
             <li className='flex justify-between gap-x-6 py-5' key={index}>
               <div>
                 <p className='text-sm font-semibold leading-9 text-gray-900'>
@@ -45,6 +48,13 @@ export default function HospitalList() {
           ))
         )}
       </ul>
+      {result?.totalPage && result?.page && (
+        <Pagination
+          url={"/hospitals"}
+          page={result.page}
+          totalPage={result.totalPage}
+        />
+      )}
     </div>
   );
 }
