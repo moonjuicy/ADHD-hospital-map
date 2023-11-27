@@ -1,6 +1,6 @@
 export interface HospitalsProp {
-  DESCRIPTION: HospitalProp;
-  DATA: HospitalProp[];
+  DESCRIPTION?: HospitalProp;
+  DATA?: HospitalProp[];
 }
 // 필요한 값만 입력해도 됨
 export interface HospitalProp {
@@ -38,4 +38,16 @@ export interface HospitalProp {
   dutytime6s: string;
   dutytime4s: string;
   dutymapimg: string;
+}
+
+export interface HospitalsType {
+  DATA: HospitalType[];
+}
+export interface HospitalType {
+  dutytel1: string;
+  dutyaddr: string;
+  wgs84lat: string;
+  wgs84lon: string;
+  dutyname: string;
+  dutydivnam: string;
 }
