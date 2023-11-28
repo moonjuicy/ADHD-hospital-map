@@ -51,8 +51,13 @@ export default function HospitalList() {
   }, [fetchNext, isPageEnd, hasNextPage]);
 
   if (isError) {
-    return <span>다시 시도해주세요</span>;
+    return (
+      <div className='w-full h-screen mx-auto pt-[10%] text-red-500'>
+        다시 시도해주세요
+      </div>
+    );
   }
+
   return (
     <div className='px-4 md:max-w-5xl mx-auto py-8'>
       <ul role='list' className='divide-y divide-gray-100'>

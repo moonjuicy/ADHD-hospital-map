@@ -1,6 +1,7 @@
 import { HospitalType } from "@/interface";
 import { Dispatch, SetStateAction } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { useRouter } from "next/router";
 
 interface HospitalInfoBoxProps {
   hospital: HospitalType | null;
@@ -11,6 +12,7 @@ export default function HospitalInfoBox({
   hospital,
   setHospital,
 }: HospitalInfoBoxProps) {
+  const router = useRouter();
   return (
     <div className='fixed transition ease-in-out delay-150 inset-x-0 mx-auto bottom-20 rounded-lg shadow-lg max-w-sm md:max-w-xl z-10 w-full bg-white overflow-hidden'>
       {hospital && (
@@ -28,6 +30,15 @@ export default function HospitalInfoBox({
               <li>{hospital.address}</li>
               <li>{hospital.phone}</li>
             </ul>
+          </div>
+          <div>
+            <button
+              type='button'
+              onClick={() => router.push(`/hospitals/${hospital.id}`)}
+              className='w-full bg-blue-700 hover:bg-blue-500 focus:bg-blue-500 py-3 text-white font-semibold'
+            >
+              상세보기
+            </button>
           </div>
         </>
       )}

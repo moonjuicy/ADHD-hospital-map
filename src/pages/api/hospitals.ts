@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<HospitalApiResponse | HospitalType[]>
+  res: NextApiResponse<HospitalApiResponse | HospitalType[] | HospitalType>
 ) {
   const { page = "" }: { page?: string } = req.query;
   const prisma = new PrismaClient();
@@ -27,10 +27,14 @@ export default async function handler(
       totalPage: Math.ceil(count / perPage),
     });
   } else {
+    const { id }: { id?: string } = req.query;
     const hospitals = await prisma.hospital.findMany({
       orderBy: { id: "asc" },
+      where: {
+        id: id ? parseInt(id) : {},
+      },
     });
 
-    res.status(200).json(hospitals);
+    res.status(200).json(id ? hospitals[0] : hospitals);
   }
 }
