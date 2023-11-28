@@ -10,7 +10,7 @@ import axios from "axios";
 export default function Home({ hospitals }: { hospitals: HospitalType[] }) {
   const [map, setMap] = useState(null);
   const [currentHospital, setCurrentHospital] = useState(null);
-  console.log("hospitals", hospitals);
+
   return (
     <>
       <Map setMap={setMap} />
