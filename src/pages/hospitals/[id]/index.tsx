@@ -9,7 +9,6 @@ import Map from "@/components/Map";
 import Marker from "@/components/Marker";
 
 export default function HospitalPage() {
-  const [map, setMap] = useState(null);
   const router = useRouter();
   const { id } = router.query;
 
@@ -89,8 +88,8 @@ export default function HospitalPage() {
       </div>
       {isSuccess && (
         <div className='overflow-hidden w-full mb-20 max-w-5xl mx-auto max-h-[600px]'>
-          <Marker map={map} hospital={hospital} />
-          <Map lat={hospital.lat} lng={hospital.lng} zoom={1} setMap={setMap} />
+          <Marker hospital={hospital} />
+          <Map lat={hospital.lat} lng={hospital.lng} zoom={1} />
         </div>
       )}
     </>

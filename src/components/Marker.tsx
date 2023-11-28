@@ -1,11 +1,13 @@
 import { useEffect, useCallback } from "react";
 import { HospitalType } from "@/interface";
+import { useRecoilValue } from "recoil";
+import { mapState } from "@/atom";
 
 interface MarkerProps {
-  map: any;
   hospital: HospitalType;
 }
-export default function Marker({ map, hospital }: MarkerProps) {
+export default function Marker({ hospital }: MarkerProps) {
+  const map = useRecoilValue(mapState);
   const loadKakaoMap = useCallback(() => {
     if (map && hospital) {
       const markerPosition = new window.kakao.maps.LatLng(

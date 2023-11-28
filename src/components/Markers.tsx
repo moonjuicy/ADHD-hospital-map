@@ -1,16 +1,16 @@
 import { useEffect, Dispatch, SetStateAction, useCallback } from "react";
 import { HospitalType } from "@/interface";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { currentHospitalState, locationState, mapState } from "@/atom";
 
 interface MarkerProps {
-  map: any;
   hospitals: HospitalType[];
-  setCurrentHospital: Dispatch<SetStateAction<any>>;
 }
-export default function Markers({
-  map,
-  hospitals,
-  setCurrentHospital,
-}: MarkerProps) {
+export default function Markers({ hospitals }: MarkerProps) {
+  const map = useRecoilValue(mapState);
+  const setCurrentHospital = useSetRecoilState(currentHospitalState);
+  const [location, setLocation] = useRecoilState(locationState);
+
   const loadKakaoMap = useCallback(() => {
     if (map) {
       hospitals.map((hospital: HospitalType) => {
@@ -47,10 +47,16 @@ export default function Markers({
         // 선택한 병원 저장
         window.kakao.maps.event.addListener(marker, "click", function () {
           setCurrentHospital(hospital);
+          setLocation({
+            ...location,
+            lat: hospital.lat,
+            lng: hospital.lng,
+          });
         });
       });
     }
-  }, [hospitals, map, setCurrentHospital]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hospitals, map]);
 
   useEffect(() => {
     loadKakaoMap();

@@ -1,21 +1,32 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { HospitalType } from "@/interface";
 import { useInfiniteQuery } from "react-query";
 import axios from "axios";
 import Loading from "@/components/Loading";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import Loader from "@/components/Loader";
+import SearchBar from "@/components/SearchBar";
+import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { searchState } from "@/atom";
 
 export default function HospitalList() {
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = !!pageRef?.isIntersecting;
+  const searchValue = useRecoilValue(searchState);
 
+  const router = useRouter();
+  const searchParams = {
+    q: searchValue?.q,
+    district: searchValue?.district,
+  };
   const fetchHospitals = async ({ pageParam = 1 }) => {
     const { data } = await axios("/api/hospitals?page=" + pageParam, {
       params: {
         limit: 3,
         page: pageParam,
+        ...searchParams,
       },
     });
     return data;
@@ -28,7 +39,7 @@ export default function HospitalList() {
     hasNextPage,
     isError,
     isLoading,
-  } = useInfiniteQuery("hospitals", fetchHospitals, {
+  } = useInfiniteQuery(["hospitals", searchParams], fetchHospitals, {
     getNextPageParam: (lastPage: any) =>
       lastPage.data?.length > 0 ? lastPage.page + 1 : undefined,
   });
@@ -60,6 +71,7 @@ export default function HospitalList() {
 
   return (
     <div className='px-4 md:max-w-5xl mx-auto py-8'>
+      <SearchBar />
       <ul role='list' className='divide-y divide-gray-100'>
         {isLoading ? (
           <Loading />
@@ -67,7 +79,11 @@ export default function HospitalList() {
           hospitals?.pages?.map((page, index) => (
             <React.Fragment key={index}>
               {page.data.map((hospital: HospitalType, i: number) => (
-                <li className='flex justify-between gap-x-6 py-5' key={i}>
+                <li
+                  className='flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50'
+                  key={i}
+                  onClick={() => router.push(`/hospitals/${hospital.id}`)}
+                >
                   <div>
                     <p className='text-sm font-semibold leading-9 text-gray-900'>
                       {hospital.name}

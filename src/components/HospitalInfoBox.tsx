@@ -1,18 +1,12 @@
-import { HospitalType } from "@/interface";
-import { Dispatch, SetStateAction } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { currentHospitalState } from "@/atom";
+import { useRecoilState } from "recoil";
 
-interface HospitalInfoBoxProps {
-  hospital: HospitalType | null;
-  setHospital: Dispatch<SetStateAction<any>>;
-}
-
-export default function HospitalInfoBox({
-  hospital,
-  setHospital,
-}: HospitalInfoBoxProps) {
+export default function HospitalInfoBox() {
   const router = useRouter();
+  const [hospital, setHospital] = useRecoilState(currentHospitalState);
+
   return (
     <div className='fixed transition ease-in-out delay-150 inset-x-0 mx-auto bottom-20 rounded-lg shadow-lg max-w-sm md:max-w-xl z-10 w-full bg-white overflow-hidden'>
       {hospital && (
