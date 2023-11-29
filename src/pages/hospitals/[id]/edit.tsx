@@ -1,27 +1,55 @@
 import AddressSearch from "@/components/AddressSearch";
+import Loader from "@/components/Loader";
 import { HospitalType } from "@/interface";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 
-export default function CreateHospital() {
+export default function EditHospital() {
+  const router = useRouter();
+  const { id } = router.query;
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm<HospitalType>();
-  const router = useRouter();
+
+  const fetchHospital = async () => {
+    const { data } = await axios(`/api/hospitals?id=${id}`);
+    return data as HospitalType;
+  };
+
+  const {
+    data: hospital,
+    isFetching,
+    isError,
+    isSuccess,
+  } = useQuery(`hospital-${id}`, fetchHospital, {
+    onSuccess: (data) => {
+      Object.keys(data).forEach((key) => {
+        const typedKey = key as keyof HospitalType;
+        const value = data[key as keyof HospitalType];
+        setValue(typedKey, value);
+      });
+    },
+  });
+
+  if (isFetching) {
+    return <Loader className='mt-[20]' />;
+  }
 
   return (
     <form
       className='px-4 md:max-w-4xl mx-auto py-8'
       onSubmit={handleSubmit(async (data) => {
         try {
-          const result = await axios.post("/api/hospitals", data);
+          const result = await axios.put("/api/hospitals", { ...data });
           if (result.status == 200) {
-            toast.success("병원을 등록했습니다.");
+            toast.success("병원을 수정했습니다.");
             router.replace(`/hospitals/${result?.data?.id}`);
           } else {
             toast.error("다시 시도해주세요");
@@ -121,7 +149,7 @@ export default function CreateHospital() {
           type='submit'
           className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
         >
-          저장
+          수정하기
         </button>
       </div>
     </form>
