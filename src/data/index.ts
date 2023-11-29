@@ -17,5 +17,3 @@ export const KR_DISTRICT = [
   "경상남도",
   "제주도",
 ];
-
-export const HOSPITAL_TYPE = ["병원", "의원"];
