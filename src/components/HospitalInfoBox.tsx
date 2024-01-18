@@ -2,6 +2,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { currentHospitalState } from "@/atom";
 import { useRecoilState } from "recoil";
+import Like from "./Like";
 
 export default function HospitalInfoBox() {
   const router = useRouter();
@@ -12,8 +13,9 @@ export default function HospitalInfoBox() {
       {hospital && (
         <>
           <div className='flex justify-between items-center py-4 px-5 bg-violet-500 text-white'>
-            <div>
+            <div className='flex gap-2'>
               <h4 className='text-xl font-semibold'>{hospital.name}</h4>
+              <Like hospitalId={hospital.id} />
             </div>
             <button type='button' onClick={() => setHospital(null)}>
               <AiOutlineClose />

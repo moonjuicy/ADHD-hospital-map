@@ -10,6 +10,7 @@ import Marker from "@/components/Marker";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import Like from "@/components/Like";
 
 export default function HospitalPage() {
   const router = useRouter();
@@ -50,6 +51,10 @@ export default function HospitalPage() {
     refetchOnWindowFocus: false,
   });
 
+  if (isFetching) {
+    return <Loader className='mt-[20]' />;
+  }
+
   if (isError) {
     return (
       <div className='w-full h-screen mx-auto pt-[10%] text-red-500'>
@@ -58,9 +63,6 @@ export default function HospitalPage() {
     );
   }
 
-  if (isFetching) {
-    return <Loader className='mt-[20]' />;
-  }
   return (
     <>
       <div className='max-w-5xl mx-auto px-4 py-8'>
@@ -75,6 +77,7 @@ export default function HospitalPage() {
           </div>
           {status === "authenticated" && (
             <div className='flex items-center gap-4'>
+              <Like hospitalId={hospital?.id} />
               <Link
                 className='underline hover:text-gray-400 text-sm'
                 href={`/hospitals/${hospital?.id}/edit`}

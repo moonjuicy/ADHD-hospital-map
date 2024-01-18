@@ -6,6 +6,13 @@ export interface HospitalType {
   lng?: string | null;
   name?: string | null;
   category?: string | null;
+  likes?: LikeInterface[];
+}
+
+export interface LikeInterface {
+  id: number;
+  hospitalId: number;
+  userId: number;
 }
 
 export interface HospitalApiResponse {

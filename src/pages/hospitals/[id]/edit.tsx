@@ -23,12 +23,7 @@ export default function EditHospital() {
     return data as HospitalType;
   };
 
-  const {
-    data: hospital,
-    isFetching,
-    isError,
-    isSuccess,
-  } = useQuery(`hospital-${id}`, fetchHospital, {
+  const { isFetching, isError } = useQuery(`hospital-${id}`, fetchHospital, {
     onSuccess: (data) => {
       Object.keys(data).forEach((key) => {
         const typedKey = key as keyof HospitalType;
@@ -40,6 +35,14 @@ export default function EditHospital() {
 
   if (isFetching) {
     return <Loader className='mt-[20]' />;
+  }
+
+  if (isError) {
+    return (
+      <div className='w-full h-screen mx-auto pt-[10%] text-red-500'>
+        다시 시도해주세요
+      </div>
+    );
   }
 
   return (
